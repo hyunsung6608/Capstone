@@ -1,20 +1,33 @@
-if (facility.status !== "운영 중") {
+if (facility.status !== "운영 중") {  // 운영 중이 아닌 마커에 마우스를 올리면 "운영 중이 아닙니다"라는 안내문을 보여줌
+        mapMarker.setOpacity(0.4);    // 운영 중이 아닌 곳의 마커를 반투명하게 만들어냄
         const overlayContent = `
           <div style="
-            color: red;
-            font-weight: bold;
-            font-size: 20px;
+            padding: 6px 10px;
+            background-color: #f44336;
+            color: white;
+            font-size: 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
             transform: translate(-50%, -100%);
+            white-space: nowrap;
           ">
-            ❌
+            🚫 운영 중이 아닙니다
           </div>
         `;
-
+      
         const overlay = new kakao.maps.CustomOverlay({
           position: markerPosition,
           content: overlayContent,
           yAnchor: 1,
+          zIndex: 3,
+          clickable: false,
         });
-
-        overlay.setMap(map);
+      
+        // 마우스 오버/아웃 시 오버레이 보여주기
+        kakao.maps.event.addListener(mapMarker, "mouseover", () => {
+          overlay.setMap(map);
+        });
+        kakao.maps.event.addListener(mapMarker, "mouseout", () => {
+          overlay.setMap(null);
+        });
       }
